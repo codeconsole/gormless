@@ -14,10 +14,26 @@ http://localhost:8080/person/edit/1
 
 Result: Works fine.
 All Other CRUD Methods Work
+(This phase can be demonstrated by checking out the initial branch)
+https://github.com/codeconsole/gormless/tree/initial
 
 The modification:
 
-* Modify PersonService to not use Gorm
+Modify PersonService to not use Gorm:
+
+	class PersonService {
+		Map<Long, Person> database = [:]
+		long idGenerator = 0
+		Person get(Serializable id) { database[id] }	
+		List<Person> list(Map args) { database.values().collect { it } }
+		Long count() { database.size() }
+		void delete(Serializable id) { database.remove(id) }
+		Person save(Person person) {
+			person.id = person.id?:++idGenerator
+			database[person.id] = person
+		}
+	}
+
 
 	grails run-app
 

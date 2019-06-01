@@ -1,18 +1,20 @@
 package gormless
 
-import grails.gorm.services.Service
+class PersonService {
 
-@Service(Person)
-interface PersonService {
+	Map<Long, Person> database = [:]
+	long idGenerator = 0
 
-    Person get(Serializable id)
+    Person get(Serializable id) { database[id] }
 
-    List<Person> list(Map args)
+    List<Person> list(Map args) { database.values().collect { it } }
 
-    Long count()
+    Long count() { database.size() }
 
-    void delete(Serializable id)
+    void delete(Serializable id) { database.remove(id) }
 
-    Person save(Person person)
-
+    Person save(Person person) {
+    	person.id = person.id?:++idGenerator
+    	database[person.id] = person
+    }
 }

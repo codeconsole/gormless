@@ -42,6 +42,10 @@ http://localhost:8080/person/edit/1
 
 Result: No change. notFound() due to controller update method receiving null person object.
 All Other CRUD Methods Work
+(This phase can be demonstrated by checking out the service-based branch)
+https://github.com/codeconsole/gormless/tree/service-based
+
+IMPORTANT NOTE: adding logSql:true shows that a Person.get() call is attempted prior to calling the update(Person person) controller method.  This is unexpected behavior as personService was completely bipassed.  personService.get() should have been called instead.
 
 Completely Remove GORM by:
 
